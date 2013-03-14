@@ -25,7 +25,7 @@ public class RoundRobinSelectorTest {
     public void testRotation() {
         Set<HazelcastInstance> instances = factory(3, () -> Hazelcast.newHazelcastInstance(null));
         RoundRobinSelector aSel = new RoundRobinSelector(instances.iterator().next(), "tester");
-        Set<Member> selected = factory(3, () -> aSel.select() );
+        Set<Member> selected = factory(3, () -> aSel.advance().select() );
         assert 3 == selected.size();
         assert selected.equals(transform(instances, (i) -> i.getCluster().getLocalMember()));
     }

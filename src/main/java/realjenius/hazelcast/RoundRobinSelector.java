@@ -28,6 +28,11 @@ public class RoundRobinSelector {
         this.instance = instance;
     }
 
+    public RoundRobinSelector advance() {
+        pivot.incrementAndGet();
+        return this;
+    }
+
     public Member select() {
         List<Member> members = new ArrayList<>(instance.getCluster().getMembers());
         int size = members.size();
@@ -36,7 +41,7 @@ public class RoundRobinSelector {
         // No streaming API in this milestone... sigh.
         // members.sort(...)
         Collections.sort(members, (left,right) -> left.getUuid().compareTo(right.getUuid()));
-        return members.get((int)(pivot.incrementAndGet() % size));
+        return members.get((int)(pivot.get() % size));
     }
 
 }
